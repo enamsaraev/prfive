@@ -1,0 +1,46 @@
+{% extends 'transfers-menu.html' %}
+{% load static %}
+{% csrf_token %}
+
+{% block contentlink %}
+<link rel="stylesheet" href='{% static "css/transfers/transfers_to_client.css" %}'>
+{% endblock %}
+
+{% block content %}
+<body>
+<div class="form-body">
+    <div class="row">
+        <div class="form-holder">
+            <div class="form-content">
+                <div class="form-items">
+                    <h3>Register Today</h3>
+                    <p>Fill in the data below.</p>
+                    <form class="requires-validation" method="post" action="{% url "app:transfers-to-client" %}" autocomplete="off">
+
+                        {% csrf_token %}
+                        {{ form.from_user }}
+                        {{ form.from_account }}
+                        {{ form.to_user }}
+                        {{ form.to_account }}
+                        {{ form.bank }}
+                        {{ form.transfer_purpose }}
+                        {{ form.money }}
+                        
+              
+
+                        <div class="form-button mt-3">
+                            <button id="submit" type="submit" class="btn btn-primary">Перевести</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block contentscript %}
+<script src="{% static 'js/transfers.js' %}"> </script>
+{% endblock %}
+
+
+

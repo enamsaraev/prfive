@@ -1,0 +1,30 @@
+{% extends 'transfers-menu.html' %}
+{% load static %}
+{% csrf_token %}
+
+{% block contentlink %}
+<link rel="stylesheet" href='{% static "css/transfers/transfer-analitics.css" %}'>
+{% endblock %}
+
+{% block content %}        
+    <table class="table-con container">
+        <thead>
+            <tr>
+                <th><h1>Отправитель</h1></th>
+                <th><h1>Банк отправителя</h1></th>
+                <th><h1>Получатель</h1></th>
+                <th><h1>Банк получаетеля</h1></th>
+                <th><h1>Сумма</h1></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                {% for item, value in item.items %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

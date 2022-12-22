@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import datetime
 
 from pathlib import Path
 
@@ -78,11 +79,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'prac.wsgi.application'
 
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SECURITY_EXPIRE_AFTER = 1800
+SESSION_SECURITY_WARN_AFTER = 1500
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ]
+}
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=12)
 }
 
 # Database
