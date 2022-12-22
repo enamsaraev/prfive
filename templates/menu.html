@@ -1,0 +1,22 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Nice dark sign in form</title>
+      <link rel="stylesheet" href='{% static "css/menu.css" %}'>
+</head>
+
+<body>
+    <nav class="navMenu">
+      <a href="#">Home</a>
+      <a href="{% url 'app:transfers' %}">Перевод</a>
+      <a href="#">Отчеты</a>
+      <a href="#">Logout</a>
+      <div class="dot"></div>
+    </nav>
+</body>
+
+</html>
