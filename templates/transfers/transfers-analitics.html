@@ -1,0 +1,75 @@
+{% extends 'transfers-menu.html' %}
+{% load static %}
+{% csrf_token %}
+
+{% block contentlink %}
+<link rel="stylesheet" href='{% static "css/transfers/transfer-analitics.css" %}'>
+{% endblock %}
+
+{% block content %}        
+    <table class="table-con container">
+        <thead>
+            <tr>
+                <th><h1>Отправитель</h1></th>
+                <th><h1>Получатель</h1></th>
+                <th><h1>Банк</h1></th>
+                <th><h1>Сумма</h1></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                {% for item, value in item.items %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+{% load static %}
+{% csrf_token %}
+
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Nice dark sign in form</title>
+      <link rel="stylesheet" href='{% static "css/transfer-analitics.css" %}'>
+</head>
+
+<body>
+    <h1><span class="blue">&lt;</span>Table<span class="blue">&gt;</span> <span class="yellow">Responsive</pan></h1>
+        
+        <table class="container">
+            <thead>
+                <tr>
+                    <th><h1>Отправитель</h1></th>
+                    <th><h1>Получатель</h1></th>
+                    <th><h1>Банк</h1></th>
+                    <th><h1>Сумма</h1></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    {% for item, value in item.items %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</body>
+
+</html>
+

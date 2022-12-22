@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class MoneyTransferManager(models.Manager):
+class MoneyTransferToClientManager(models.Manager):
     """Money transfer model manager"""
 
     def create_transfer(
@@ -30,6 +30,34 @@ class MoneyTransferManager(models.Manager):
         return transfer
 
 
+class MoneyTransferToCompanyManager(models.Manager):
+    """Money transfer model manager"""
+
+    def create_transfer(
+        self, 
+        fio: str,
+        user_account: str,
+        user_bank: str,
+        company: str,
+        company_account: str,
+        company_bank: str,
+        transfer_purpose: str,
+        money: str,
+    ):
+
+        transfer = self.model(
+            user=Account.objects.get(account=user_account),
+            user_bank=Bank.objects.get(bank=user_bank),
+            company=Company.objects.get(account=company_account),
+            company_bank=Bank.objects.get(bank=company_bank),
+            money=money,
+            transfer_purpose=transfer_purpose
+        )
+        transfer.save()
+
+        return transfer
+
+
 class Account(models.Model):
     """User's account"""
 
@@ -38,6 +66,12 @@ class Account(models.Model):
         related_name='account',
         on_delete=models.SET_NULL,
         null=True,
+    )
+    fio = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        default='',
     )
     email = models.EmailField(default='')
     created_at = models.DateTimeField()
@@ -102,8 +136,59 @@ class Bank(models.Model):
     def __str__(self) -> str:
         return self.bank
 
+        
+class Company(models.Model):
+    """Company model"""
 
-class MoneyTransfer(models.Model):
+    name = models.CharField(
+        max_length=255
+    )
+    email = models.EmailField(
+        default='',
+        blank=False,
+        null=False,
+    )
+    account = models.CharField(
+        max_length=20,
+        blank=False,
+        null=False,
+    )
+    inn = models.CharField(
+        max_length=10,
+        blank=False,
+        null=False,
+    )
+    kpp = models.CharField(
+        max_length=9,
+        blank=False,
+        null=False,
+    )
+    bank = models.ForeignKey(
+        'Bank',
+        related_name='company_bank',
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    bank_bik = models.CharField(
+        max_length=9,
+        blank=False,
+        null=False,
+    )
+    transfer_purpose = models.TextField()
+    money = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def set_plus_balance(self, money: int):
+        """Minus money from users balance"""
+        
+        balance = int(self.money) + money
+        self.money = str(balance)
+
+        self.save(update_fields=['money'])
+
+
+
+class MoneyTransferToClient(models.Model):
     """Money transfer model"""
 
     from_user = models.ForeignKey(
@@ -138,7 +223,46 @@ class MoneyTransfer(models.Model):
     money = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    objects = MoneyTransferManager()
+    objects = MoneyTransferToClientManager()
 
     def __str__(self) -> str:
         return str(self.created_at)
+
+
+class MoneyTransferToCompany(models.Model):
+    """Money transfer model"""
+
+    user = models.ForeignKey(
+        'Account',
+        related_name='user_transfer_to_company',
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    user_bank = models.ForeignKey(
+        'Bank',
+        related_name='company_transfer_user_bank',
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    company = models.ForeignKey(
+        'Company',
+        related_name='company_transfers',
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    company_bank = models.ForeignKey(
+        'Bank',
+        related_name='company_transfer_bank',
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    transfer_purpose = models.TextField()
+    money = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = MoneyTransferToClientManager()
+
+    def __str__(self) -> str:
+        return str(self.created_at)
+
+    objects = MoneyTransferToCompanyManager()

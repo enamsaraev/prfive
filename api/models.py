@@ -1,6 +1,6 @@
 from django.db import models
 
-from core.models import Account, Bank, MoneyTransfer
+from core.models import Account, Bank, MoneyTransferToClient
 
 
 class EmailEntry(models.Model):
