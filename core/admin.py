@@ -2,13 +2,22 @@ from django.contrib import admin
 from core import models
 
 
+class MoneyAccountInLine(admin.StackedInline):
+    """Money account model inline"""
+
+    model = models.MoneyAccount
+    extra = 1
+
+
 @admin.register(models.Account)
 class AccountAdmin(admin.ModelAdmin):
     """User's account admin model"""
 
-    list_display = ('user', 'account',)
-    list_filter = ('user', 'account',)
-    search_fields = ('account',)
+    list_display = ('user', 'fio')
+    list_filter = ('user', 'fio')
+    search_fields = ('user', 'fio')
+
+    inlines = [MoneyAccountInLine]
 
 
 @admin.register(models.Company)

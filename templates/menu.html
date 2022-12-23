@@ -11,10 +11,10 @@
 
 <body>
     <nav class="navMenu">
-      <a href="#">Home</a>
+      <a href="{% url 'app:guides' %}">Справочники</a>
       <a href="{% url 'app:transfers-to-client' %}">Перевод</a>
-      <a href="{% url 'app:transfers-analitics' %}">Отчеты</a>
-      <a href="http://127.0.0.1:8000/admin/">Админ</a>
+      <a href="{% url 'app:xl' %}">Отчеты</a>
+      <a href="http://127.0.0.1:8000/admin/">Админ-панель</a>
       <div class="dot"></div>
     </nav>
 </body>

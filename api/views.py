@@ -4,7 +4,7 @@ from rest_framework import status
 
 from mailing.tasks import send_mail
 
-from core.models import (Account, MoneyTransferToClient, MoneyTransferToCompany, Company)
+from core.models import (Account, MoneyTransferToClient, MoneyTransferToCompany, MoneyAccount, Company, Bank)
 
 from api.serializers import TransferToClientTableData, TransferToCompanyTableData
 
@@ -22,10 +22,10 @@ class TransfeToClientrApiView(APIView):
             money=request.data['money']
         )
 
-        from_user_account = Account.objects.get(account=transfer.from_account)
+        from_user_account = MoneyAccount.objects.get(account=transfer.from_account)
         from_user_account.set_minus_balance(int(transfer.money))
 
-        to_user_account = Account.objects.get(account=transfer.to_account)
+        to_user_account = MoneyAccount.objects.get(account=transfer.to_account)
         to_user_account.set_plus_balance(int(transfer.money))
         
         send_mail.delay(
@@ -58,7 +58,7 @@ class TransferToCompanyApiView(APIView):
             money=request.data['money'],
         )
 
-        from_user_account = Account.objects.get(account=request.data['user_account'])
+        from_user_account = MoneyAccount.objects.get(account=request.data['user_account'])
         from_user_account.set_minus_balance(int(transfer.money))
 
         company = Company.objects.get(account=request.data['company_account'])
@@ -96,3 +96,16 @@ class TransfetToCompanyTable(APIView):
         serializer = TransferToCompanyTableData(data, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GuideApi(APIView):
+    """Guide api"""
+
+    def get(self, request, *args, **kwargs):
+        account = Account.objects.all()
+        bank = Bank.objects.all()
+        company = Company.objects.all()
+
+        
+
+        

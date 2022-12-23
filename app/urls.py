@@ -1,7 +1,7 @@
 from django.urls import path
 
 from app.views import (
-    LoginView, MenuView, TransfersToClientView, TransferToCompanyView, TransferAnalytics, TransferAnalyticsToCompany
+    LoginView, MenuView, TransfersToClientView, TransferToCompanyView, TransferAnalytics, TransferAnalyticsToCompany, GuideView, CreateFile
 )
 
 urlpatterns = [
@@ -11,6 +11,8 @@ urlpatterns = [
     path('transfers-to-company/', TransferToCompanyView.as_view(), name='transfers-to-company'),
     path('transfer-analytics/', TransferAnalytics.as_view(), name='transfers-analitics'),
     path('transfer-analytics-to-company/', TransferAnalyticsToCompany.as_view(), name='transfers-analitics-to-company'),
+    path('guides/', GuideView.as_view(), name='guides'),
+    path('xl/', CreateFile.as_view(), name='xl'),
 ]
 
 app_name = 'app'

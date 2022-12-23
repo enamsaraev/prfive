@@ -1,0 +1,92 @@
+{% load static %}
+{% csrf_token %}
+
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Nice dark sign in form</title>
+      <link rel="stylesheet" href='{% static "css/guides.css" %}'>
+</head>
+
+<body>
+    <h2>Аккаунты физический лиц</h2>
+    <table class="table-con container">
+        <thead>
+            <tr>
+                <th><h1>ФИО</h1></th>
+                <th><h1>Email</h1></th>
+                <th><h1>Счет</h1></th>
+                <th><h1>Баланс</h1></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in account %}
+            <tr>
+                <td>{{ item.fio}}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.account }}</td>
+                <td>{{ item.balance }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Банки</h2>
+    <table class="table-con container">
+        <thead>
+            <tr>
+                <th><h1>Наименование</h1></th>
+                <th><h1>Бик</h1></th>
+                <th><h1>Счет</h1></th>
+                <th><h1>ИНН</h1></th>
+                <th><h1>КПП</h1></th>
+                <th><h1>Коммиссия за перевод</h1></th>
+                <th><h1>Информация</h1></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in bank %}
+            <tr>
+                <td>{{ item.bank }}</td>
+                <td>{{ item.bik }}</td>
+                <td>{{ item.account }}</td>
+                <td>{{ item.inn }}</td>
+                <td>{{ item.kpp }}</td>
+                <td>{{ item.money_transfer_comission }}</td>
+                <td>{{ item.info }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Юридические организации</h2>
+    <table class="table-con container">
+        <thead>
+            <tr>
+                <th><h1>Наименование</h1></th>
+                <th><h1>Счет</h1></th>
+                <th><h1>ИНН</h1></th>
+                <th><h1>КПП</h1></th>
+                <th><h1>Банк</h1></th>
+                <th><h1>БИК Банка</h1></th>
+                <th><h1>Денежные средства</h1></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in company %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.account }}</td>
+                <td>{{ item.inn }}</td>
+                <td>{{ item.kpp }}</td>
+                <td>{{ item.bank.bank }}</td>
+                <td>{{ item.bank_bik }}</td>
+                <td>{{ item.money }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>

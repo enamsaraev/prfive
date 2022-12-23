@@ -5,12 +5,11 @@
 <html >
 <head>
   <meta charset="UTF-8">
-  <title>Nice dark sign in form</title>
       <link rel="stylesheet" href='{% static "css/login.css" %}'>
 </head>
 
 <body>
-  <h1>Sign In Form</h1>
+  <h1>Вход</h1>
 <div id="wrapper">
 	<form id="signin" method="post" action="{% url "app:login" %}" autocomplete="off">
 		{% csrf_token %}
