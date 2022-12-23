@@ -1,4 +1,5 @@
-import requests, json
+import requests
+import pandas as pd
 
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -6,7 +7,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 
-from core.models import Account, Company
+from core.models import Account, Company, Bank, MoneyTransferToCompany
 
 from app.forms import LoginForm, TransferToClientForm, TransferToCompanyForm
 
@@ -98,10 +99,10 @@ class TransfersToClientView(TemplateView):
                         headers=headers,
                     )
 
-                    if response.status_code == 201:
-                        return render(request, self.template_name, {"form": self.form_class})
+                    return render(request, self.template_name, {"form": self.form_class})
 
-        return redirect(reverse("app:login"))
+        else:
+            return redirect(reverse("app:login"))
 
 
 class TransferToCompanyView(TemplateView):
@@ -152,7 +153,8 @@ class TransferToCompanyView(TemplateView):
                     if response.status_code == 201:
                         return render(request, self.template_name, {"form": self.form_class})
 
-        return redirect(reverse("app:login"))
+        else:
+            return redirect(reverse("app:login"))
 
 
 class TransferAnalytics(TemplateView):
@@ -193,3 +195,62 @@ class TransferAnalyticsToCompany(TemplateView):
 
         else:
             return redirect(reverse("app:login"))
+
+
+class GuideView(TemplateView):
+    template_name = 'guides/guide.html'
+
+    def get(self, request, *args, **kwarg):
+        """Prepares data for the guide book"""
+        if request.user.is_authenticated:
+
+            context = {
+                'account': Account.objects.all(),
+                'bank': Bank.objects.all(),
+                'company': Company.objects.all(),
+            }
+
+            return render(request, self.template_name, context)
+        
+        else:
+            return redirect(reverse("app:login"))
+
+
+
+class CreateFile(TemplateView):
+    def get(self, request):
+        headers = {'Authorization': 'JWT ' + request.session["token"]}
+        company_response = requests.get(
+                "http://localhost:8000" + reverse("api:transfer-analitics-to-company"),
+                headers=headers,
+            )
+        company_data = company_response.json()
+
+        company_df = pd.DataFrame({
+            'Отправитель': [company_data[item]['user'] for item in range(len(company_data))],
+            'Банк отправителя': [company_data[item]['user_bank'] for item in range(len(company_data))],
+            'Наименование организации': [company_data[item]['company'] for item in range(len(company_data))],
+            'Банк организации': [company_data[item]['company_bank'] for item in range(len(company_data))],
+            'Сумма перевода': [company_data[item]['money'] for item in range(len(company_data))],
+        })
+
+        company_df.to_excel('static/xl/payments-to-company.xlsx')
+
+
+        client_response = requests.get(
+                "http://localhost:8000" + reverse("api:transfer-analitics"),
+                headers=headers,
+            )
+        client_data = client_response.json()
+
+        client_df = pd.DataFrame({
+            'Счет отправителя': [client_data[item]['from_account'] for item in range(len(client_data))],
+            'Счет получателя': [client_data[item]['to_account'] for item in range(len(client_data))],
+            'Банк': [client_data[item]['bank'] for item in range(len(client_data))],
+            'Сумма перевода': [client_data[item]['money'] for item in range(len(client_data))],
+        })
+
+        client_df.to_excel('static/xl/payments-to-client.xlsx')
+
+
+        return redirect(reverse("app:menu"))

@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -74,11 +75,57 @@ class Account(models.Model):
         default='',
     )
     email = models.EmailField(default='')
+    passport_number = models.CharField(
+        max_length=9,
+        blank=False,
+        null=False,
+    )
+    passport_data = models.TextField()
     created_at = models.DateTimeField()
+
+
+    def __str__(self) -> str:
+        return self.user.username
+
+
+class MoneyAccount(models.Model):
+    """Account data for user money"""
+
+    ACCOUNT_TYPE = [
+        ('Расчетный', 'Расчетный'),
+    ]
+    ACCOUNT_STATUS = [
+        ('Открыт', 'Открыт'),
+        ('Закрыт', 'Закрыт'),
+    ]
+    CURRENCY = [
+        ('RUR', 'RUR'),
+        ('USD', 'USD'),
+        ('EUR', 'EUR'),
+    ]
+
+    user_account = models.ForeignKey(
+        'Account',
+        related_name='money_account',
+        on_delete=models.SET_NULL,
+        null=True,
+    )
     account = models.CharField(
         max_length=20,
         blank=False,
         null=False,
+    )
+    type = models.CharField(
+        max_length=255,
+        choices=ACCOUNT_TYPE,
+    )
+    status = models.CharField(
+        max_length=255,
+        choices=ACCOUNT_STATUS,
+    )
+    currency = models.CharField(
+        max_length=255,
+        choices=CURRENCY,
     )
     balance = models.CharField(
         max_length=20,
@@ -87,7 +134,7 @@ class Account(models.Model):
     )
 
     def __str__(self) -> str:
-        return self.user.username
+        return self.account
 
     def set_minus_balance(self, money: int):
         """Minus money from users balance"""
@@ -104,7 +151,6 @@ class Account(models.Model):
         self.balance = str(balance)
 
         self.save(update_fields=['balance'])
-
 
 class Bank(models.Model):
     """Bank model"""
@@ -185,7 +231,6 @@ class Company(models.Model):
         self.money = str(balance)
 
         self.save(update_fields=['money'])
-
 
 
 class MoneyTransferToClient(models.Model):
