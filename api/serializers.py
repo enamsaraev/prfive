@@ -1,34 +1,26 @@
 from rest_framework import serializers
 
-from core.models import MoneyTransferToClient, Bank
+from core.models import TransferToClientData, TransferToCompanyData
 
 
 class TransferToClientTableData(serializers.ModelSerializer):
 
-    bank = serializers.StringRelatedField(source='bank.bank', read_only=True)
-
     class Meta:
-        model = MoneyTransferToClient
+        model = TransferToClientData
         fields = (
-            'from_account',
-            'to_account',
-            'bank',
+            'user',
+            'to_user',
             'money',
+            'created_at',
         )
 
 class TransferToCompanyTableData(serializers.ModelSerializer):
 
-    user = serializers.StringRelatedField(source='user.account', read_only=True)
-    user_bank = serializers.StringRelatedField(source='user_bank.bank')
-    company = serializers.StringRelatedField(source='company.name')
-    company_bank = serializers.StringRelatedField(source='company_bank.bank')
-
     class Meta:
-        model = MoneyTransferToClient
+        model = TransferToCompanyData
         fields = (
             'user',
-            'user_bank',
-            'company',
-            'company_bank',
+            'to_company',
             'money',
+            'created_at',
         )

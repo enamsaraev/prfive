@@ -7,6 +7,9 @@ from core.models import Company, Bank
 
 BANKS = [(bank.bank, bank.bank)  for bank in Bank.objects.all()]
 COMPANIES = [(comapny.name, comapny.name) for comapny in Company.objects.all()]
+# BANKS = ''
+# COMPANIES = ''
+
 
 class LoginForm(Form):
     username = CharField(
@@ -57,7 +60,7 @@ class TransferToClientForm(Form):
         )
     )
     to_account = CharField(
-        max_length=150, 
+        max_length=30, 
         min_length=4,
         widget=TextInput(attrs={
             'class': 'form-control',

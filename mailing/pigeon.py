@@ -40,18 +40,18 @@ class Pigeon:
         """Logging sent email"""
 
         EmailEntry.objects.update_or_create(
-            user=Account.objects.get(email=self.to),
-            text=self.message,
             msg_number=self.transfer_id,
-            theme=self.subject
+            user=Account.objects.get(email=self.to),
+            subject=self.subject,
+            message=self.message,
         )
 
     def __is_sent_already(self) -> bool:
         """Check if mail is already sent"""
         
         return EmailEntry.objects.filter(
+            msg_number=self.transfer_id,
             user=Account.objects.get(email=self.to), 
-            text=self.message,
-            msg_number=self.transfer_id
+            message=self.message,
         ).exists()
     

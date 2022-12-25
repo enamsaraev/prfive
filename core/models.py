@@ -3,60 +3,60 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class MoneyTransferToClientManager(models.Manager):
-    """Money transfer model manager"""
+# class MoneyTransferToClientManager(models.Manager):
+#     """Money transfer model manager"""
 
-    def create_transfer(
-        self, 
-        from_user: str,
-        from_account: str,
-        to_user: str,
-        to_account: str,
-        bank: str,
-        transfer_purpose: str,
-        money: str,
-    ):
+#     def create_transfer(
+#         self, 
+#         from_user: str,
+#         from_account: str,
+#         to_user: str,
+#         to_account: str,
+#         bank: str,
+#         transfer_purpose: str,
+#         money: str,
+#     ):
 
-        transfer = self.model(
-            from_user=Account.objects.get(account=from_account),
-            from_account=from_account,
-            to_user=Account.objects.get(account=to_account),
-            to_account=to_account,
-            bank=Bank.objects.get(bank=bank),
-            money=money,
-            transfer_purpose=transfer_purpose
-        )
-        transfer.save()
+#         transfer = self.model(
+#             from_user=Account.objects.get(account=from_account),
+#             from_account=from_account,
+#             to_user=Account.objects.get(account=to_account),
+#             to_account=to_account,
+#             bank=Bank.objects.get(bank=bank),
+#             money=money,
+#             transfer_purpose=transfer_purpose
+#         )
+#         transfer.save()
 
-        return transfer
+#         return transfer
 
 
-class MoneyTransferToCompanyManager(models.Manager):
-    """Money transfer model manager"""
+# class MoneyTransferToCompanyManager(models.Manager):
+#     """Money transfer model manager"""
 
-    def create_transfer(
-        self, 
-        fio: str,
-        user_account: str,
-        user_bank: str,
-        company: str,
-        company_account: str,
-        company_bank: str,
-        transfer_purpose: str,
-        money: str,
-    ):
+#     def create_transfer(
+#         self, 
+#         fio: str,
+#         user_account: str,
+#         user_bank: str,
+#         company: str,
+#         company_account: str,
+#         company_bank: str,
+#         transfer_purpose: str,
+#         money: str,
+#     ):
 
-        transfer = self.model(
-            user=Account.objects.get(account=user_account),
-            user_bank=Bank.objects.get(bank=user_bank),
-            company=Company.objects.get(account=company_account),
-            company_bank=Bank.objects.get(bank=company_bank),
-            money=money,
-            transfer_purpose=transfer_purpose
-        )
-        transfer.save()
+#         transfer = self.model(
+#             user=Account.objects.get(account=user_account),
+#             user_bank=Bank.objects.get(bank=user_bank),
+#             company=Company.objects.get(account=company_account),
+#             company_bank=Bank.objects.get(bank=company_bank),
+#             money=money,
+#             transfer_purpose=transfer_purpose
+#         )
+#         transfer.save()
 
-        return transfer
+#         return transfer
 
 
 class Account(models.Model):
@@ -236,39 +236,40 @@ class Company(models.Model):
 class MoneyTransferToClient(models.Model):
     """Money transfer model"""
 
-    from_user = models.ForeignKey(
-        'Account',
-        related_name='transfers_from',
-        on_delete=models.SET_NULL,
-        null=True,
+    from_user = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
     )
     from_account = models.CharField(
         max_length=30,
         blank=False,
         null=False
     )
-    to_user = models.ForeignKey(
-        'Account',
-        related_name='transfers_to',
-        on_delete=models.SET_NULL,
-        null=True,
+    to_user = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
     )
     to_account = models.CharField(
         max_length=30,
         blank=False,
         null=False
     )
-    bank = models.ForeignKey(
-        'Bank',
-        related_name='transfers_bank',
-        on_delete=models.SET_NULL,
-        null=True,
+    bank = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
     )
     transfer_purpose = models.TextField()
-    money = models.CharField(max_length=20)
+    money = models.CharField(
+        max_length=20,
+        blank=False,
+        null=False
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
-    objects = MoneyTransferToClientManager()
+    # objects = MoneyTransferToClientManager()
 
     def __str__(self) -> str:
         return str(self.created_at)
@@ -277,37 +278,96 @@ class MoneyTransferToClient(models.Model):
 class MoneyTransferToCompany(models.Model):
     """Money transfer model"""
 
-    user = models.ForeignKey(
-        'Account',
-        related_name='user_transfer_to_company',
-        on_delete=models.SET_NULL,
-        null=True,
+    fio = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
     )
-    user_bank = models.ForeignKey(
-        'Bank',
-        related_name='company_transfer_user_bank',
-        on_delete=models.SET_NULL,
-        null=True,
+    user_account = models.CharField(
+        max_length=30,
+        blank=False,
+        null=False
     )
-    company = models.ForeignKey(
-        'Company',
-        related_name='company_transfers',
-        on_delete=models.SET_NULL,
-        null=True,
+    user_bank = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
     )
-    company_bank = models.ForeignKey(
-        'Bank',
-        related_name='company_transfer_bank',
-        on_delete=models.SET_NULL,
-        null=True,
+    company = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
+    company_account = models.CharField(
+        max_length=30,
+        blank=False,
+        null=False
+    )
+    company_bank = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
     )
     transfer_purpose = models.TextField()
-    money = models.CharField(max_length=20)
+    money = models.CharField(
+        max_length=20,
+        blank=False,
+        null=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    objects = MoneyTransferToClientManager()
+    # objects = MoneyTransferToCompanyManager()
 
     def __str__(self) -> str:
         return str(self.created_at)
 
-    objects = MoneyTransferToCompanyManager()
+
+class TransferToClientData(models.Model):
+    """Save info about client-to-client data"""
+
+    user = models.ForeignKey(
+        'Account',
+        related_name='to_client_transfers',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    to_user = models.ForeignKey(
+        'Account',
+        related_name='from_client_transfers',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    money = models.CharField(
+        max_length=20,
+        null=False,
+        blank=False
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.user
+
+
+class TransferToCompanyData(models.Model):
+    """Save info about client-to-client data"""
+
+    user = models.ForeignKey(
+        'Account',
+        related_name='to_company_transfers',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    to_company = models.ForeignKey(
+        'Company',
+        related_name='from_client_to_company_transfers',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    money = models.CharField(
+        max_length=20,
+        null=False,
+        blank=False
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.user

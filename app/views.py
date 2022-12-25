@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 
-from core.models import Account, Company, Bank, MoneyTransferToCompany
+from core.models import Account, MoneyAccount, Company, Bank, MoneyTransferToCompany
 
 from app.forms import LoginForm, TransferToClientForm, TransferToCompanyForm
 
@@ -72,11 +72,11 @@ class TransfersToClientView(TemplateView):
             if form.is_valid():
                 sender = Account.objects.filter(
                     fio=form.cleaned_data['from_user'],
-                    account=form.cleaned_data['from_account']
+                    money_account=MoneyAccount.objects.get(account=form.cleaned_data['from_account'])
                 ).exists()
                 recipient = Account.objects.filter(
                     fio=form.cleaned_data['to_user'],
-                    account=form.cleaned_data['to_account']
+                    money_account=MoneyAccount.objects.get(account=form.cleaned_data['to_account'])
                 ).exists()
 
                 if sender and recipient:
@@ -99,10 +99,12 @@ class TransfersToClientView(TemplateView):
                         headers=headers,
                     )
 
-                    return render(request, self.template_name, {"form": self.form_class})
+                    if response.status_code != 200:
+                        error_message = "Update have not been succeeded"
+                        messages.error(request, error_message)
 
-        else:
-            return redirect(reverse("app:login"))
+            return render(request, self.template_name, {"form": self.form_class})
+                        
 
 
 class TransferToCompanyView(TemplateView):
@@ -123,7 +125,7 @@ class TransferToCompanyView(TemplateView):
 
                 sender = Account.objects.filter(
                     fio=form.cleaned_data['fio'],
-                    account=form.cleaned_data['user_account']
+                    money_account=MoneyAccount.objects.get(account=form.cleaned_data['user_account'])
                 ).exists()
                 recipient = Company.objects.filter(
                     account=form.cleaned_data['company_account']
@@ -149,12 +151,13 @@ class TransferToCompanyView(TemplateView):
                         data=data,
                         headers=headers,
                     )
+                    
+                    if response.status_code != 200:
+                        error_message = "Update have not been succeeded"
+                        messages.error(request, error_message)
 
-                    if response.status_code == 201:
-                        return render(request, self.template_name, {"form": self.form_class})
+            return render(request, self.template_name, {"form": self.form_class})
 
-        else:
-            return redirect(reverse("app:login"))
 
 
 class TransferAnalytics(TemplateView):
@@ -172,9 +175,6 @@ class TransferAnalytics(TemplateView):
             data = response.json()
             
             return render(request, self.template_name, {'data': data})
-
-        else:
-            return redirect(reverse("app:login"))
 
 
 class TransferAnalyticsToCompany(TemplateView):
@@ -216,9 +216,20 @@ class GuideView(TemplateView):
             return redirect(reverse("app:login"))
 
 
+class BankOrderView(TemplateView):
+    """"""
+    template_name = 'pay-order.html'
+
+    def get(self, request, *args, **kwarg):
+        if request.user.is_authenticated:
+            return render(request, self.template_name)
+        else:
+            return redirect(reverse("app:login"))
+
+
 
 class CreateFile(TemplateView):
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         headers = {'Authorization': 'JWT ' + request.session["token"]}
         company_response = requests.get(
                 "http://localhost:8000" + reverse("api:transfer-analitics-to-company"),

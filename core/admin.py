@@ -50,5 +50,19 @@ class MoneyTransferToClientAdmin(admin.ModelAdmin):
 class MoneyTransferToCompantAdmin(admin.ModelAdmin):
     """User's account admin model"""
 
-    list_display = ('user', 'company', )
-    list_filter = ('user', 'company', )
+    list_display = ('fio', 'company', )
+    list_filter = ('fio', 'company', )
+
+
+@admin.register(models.TransferToClientData)
+class TransferToCLientDataAdmin(admin.ModelAdmin):
+    """"""
+
+    list_display = ('user',)
+
+
+@admin.register(models.TransferToCompanyData)
+class TransferToCompanyDataAdmin(admin.ModelAdmin):
+    """"""
+
+    list_display = ('user',)

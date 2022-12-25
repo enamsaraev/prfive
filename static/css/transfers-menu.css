@@ -29,7 +29,7 @@ body{
 
 .menu{
 
-    margin: 0;
+    margin-left: 20px;
     display: flex;
     /* Works well with 100% width  */
     width: 32.05em;
@@ -40,6 +40,12 @@ body{
     justify-content: center;
     background-color: var(--bgColorMenu);
     margin-top: 650px;
+}
+
+.menu_data_items{ 
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .menu__item{

@@ -15,9 +15,9 @@ class EmailEntry(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
-    theme = models.CharField(
+    subject = models.CharField(
         max_length=255,
         blank=False,
         null=False
     )
-    text = models.TextField()
+    message = models.TextField()
