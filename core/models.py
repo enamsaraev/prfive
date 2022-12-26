@@ -59,6 +59,38 @@ from django.contrib.auth.models import User
 #         return transfer
 
 
+class TransferToClientDataManager(models.Manager):
+
+    def create_data(
+        self, from_account: str, to_account: str, money: str
+    ):
+
+        data = self.model(
+            user=Account.objects.get(money_account__account=from_account),
+            to_user=Account.objects.get(money_account__account=to_account),
+            money=money,
+        )
+        data.save()
+
+        return data
+
+
+class TransferToCompanyDataManager(models.Manager):
+
+    def create_data(
+        self, from_account: str, to_company: str, money: str
+    ) -> None:
+
+        data = self.model(
+            user=Account.objects.get(money_account__account=from_account),
+            to_company=Company.objects.get(account=to_company),
+            money=money,
+        )
+        data.save()
+
+        return data
+
+
 class Account(models.Model):
     """User's account"""
 
@@ -343,8 +375,11 @@ class TransferToClientData(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    objects = TransferToClientDataManager()
+
+
     def __str__(self) -> str:
-        return self.user
+        return self.user.fio
 
 
 class TransferToCompanyData(models.Model):
@@ -369,5 +404,8 @@ class TransferToCompanyData(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self) -> str:
-        return self.user
+    objects = TransferToCompanyDataManager()
+
+
+    def __str__(self) -> str:   
+        return self.user.fio
