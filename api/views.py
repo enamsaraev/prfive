@@ -17,7 +17,11 @@ class TransfeToClientrApiView(APIView):
 
         transfer = self.create_transfer(request)
         from_user_account, to_user_account = self.solve_money(transfer)
-
+        data = self.create_analitics_table(
+            from_account=transfer.from_account,
+            to_account=transfer.to_account,
+            money=transfer.money
+        )
         
         send_mail.delay(
             to=from_user_account.user_account.email,
@@ -61,11 +65,27 @@ class TransfeToClientrApiView(APIView):
         return from_user_account, to_user_account
 
 
+    @classmethod
+    def create_analitics_table(self, from_account: str, to_account: str, money: str):
+
+        data = TransferToClientData.objects.create_data(
+            from_account=from_account,
+            to_account=to_account,
+            money=money,
+        )
+        return data
+
+
 class TransferToCompanyApiView(APIView):
     def post(self, request, *args, **kwargs):
 
         transfer = self.create_transfer(request)
         from_user_account, company = self.solve_money(transfer)
+        data = self.create_analitics_table(
+            user_account=transfer.user_account,
+            to_company=transfer.company_account,
+            money=transfer.money
+        )
 
         send_mail.delay(
             to=from_user_account.user_account.email,
@@ -103,6 +123,15 @@ class TransferToCompanyApiView(APIView):
 
         return from_user_account, company
 
+
+    @classmethod
+    def create_analitics_table(self, user_account: str, to_company: str, money: str):
+
+        TransferToCompanyData.objects.create_data(
+            from_account=user_account,
+            to_company=to_company,
+            money=money,
+        )
 
 
 class TransfetTable(APIView):
