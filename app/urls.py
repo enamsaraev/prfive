@@ -4,7 +4,7 @@ from app.views import (
     LoginView, MenuView, TransfersToClientView, 
     TransferToCompanyView, TransferAnalytics, 
     TransferAnalyticsToCompany, GuideView, CreateFile,
-    BankOrderView,
+    ClientOrderView, CompanyOrderView
 )
 
 urlpatterns = [
@@ -16,7 +16,8 @@ urlpatterns = [
     path('transfer-analytics-to-company/', TransferAnalyticsToCompany.as_view(), name='transfers-analitics-to-company'),
     path('guides/', GuideView.as_view(), name='guides'),
     path('xl/', CreateFile.as_view(), name='xl'),
-    path('pay-order/', BankOrderView.as_view(), name='pay-order')
+    path('pay-order/', ClientOrderView.as_view(), name='pay-order'),
+    path('pay-raspr/', CompanyOrderView.as_view(), name='pay-raspr'),
 ]
 
 app_name = 'app'

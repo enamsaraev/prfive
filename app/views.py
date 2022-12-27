@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 
-from core.models import Account, MoneyAccount, Company, Bank, MoneyTransferToCompany
+from core.models import Account, MoneyAccount, Company, Bank, MoneyTransferToClient, MoneyTransferToCompany
 
 from app.forms import LoginForm, TransferToClientForm, TransferToCompanyForm
 
@@ -205,7 +205,7 @@ class GuideView(TemplateView):
         if request.user.is_authenticated:
 
             context = {
-                'account': Account.objects.all(),
+                'account': MoneyAccount.objects.all(),
                 'bank': Bank.objects.all(),
                 'company': Company.objects.all(),
             }
@@ -216,16 +216,41 @@ class GuideView(TemplateView):
             return redirect(reverse("app:login"))
 
 
-class BankOrderView(TemplateView):
+class ClientOrderView(TemplateView):
     """"""
+    
     template_name = 'pay-order.html'
 
     def get(self, request, *args, **kwarg):
         if request.user.is_authenticated:
-            return render(request, self.template_name)
+            mtc = MoneyTransferToClient.objects.last()
+            context = {
+                'from_user': MoneyAccount.objects.get(account=mtc.from_account),
+                'to_user': MoneyAccount.objects.get(account=mtc.to_account),
+                'ctx': mtc,
+            }
+            ctx = MoneyTransferToClient.objects.last()
+            return render(request, self.template_name, context)
         else:
             return redirect(reverse("app:login"))
 
+
+class CompanyOrderView(TemplateView):
+    """"""
+    template_name = 'payment-order.html'
+
+    def get(self, request, *args, **kwarg):
+        if request.user.is_authenticated:
+            mtcomp = MoneyTransferToCompany.objects.last()
+            context = {
+                'ctx': mtcomp,
+                'acc': MoneyAccount.objects.get(account=mtcomp.user_account),
+                'bank': Bank.objects.get(bank=mtcomp.company_bank),
+                'company': Company.objects.get(account=mtcomp.company_account),
+            }
+            return render(request, self.template_name, context)
+        else:
+            return redirect(reverse("app:login"))
 
 
 class CreateFile(TemplateView):

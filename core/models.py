@@ -72,8 +72,6 @@ class TransferToClientDataManager(models.Manager):
         )
         data.save()
 
-        return data
-
 
 class TransferToCompanyDataManager(models.Manager):
 
@@ -88,8 +86,6 @@ class TransferToCompanyDataManager(models.Manager):
         )
         data.save()
 
-        return data
-
 
 class Account(models.Model):
     """User's account"""
@@ -99,6 +95,12 @@ class Account(models.Model):
         related_name='account',
         on_delete=models.SET_NULL,
         null=True,
+    )
+    inn = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        default='',
     )
     fio = models.CharField(
         max_length=255,
@@ -301,8 +303,6 @@ class MoneyTransferToClient(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # objects = MoneyTransferToClientManager()
-
     def __str__(self) -> str:
         return str(self.created_at)
 
@@ -347,7 +347,6 @@ class MoneyTransferToCompany(models.Model):
         null=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # objects = MoneyTransferToCompanyManager()
 
     def __str__(self) -> str:
         return str(self.created_at)

@@ -23,8 +23,8 @@
         <tbody>
             {% for item in account %}
             <tr>
-                <td>{{ item.fio}}</td>
-                <td>{{ item.email }}</td>
+                <td>{{ item.user_account.fio}}</td>
+                <td>{{ item.user_account.email }}</td>
                 <td>{{ item.account }}</td>
                 <td>{{ item.balance }}</td>
             </tr>

@@ -233,7 +233,7 @@
                 </td>
                 <td colspan="3"
                     style="width:181.4pt; border-top-style:solid; border-top-width:0.75pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:middle; -aw-border-top:0.5pt single">
-                    <p style="margin-top:3pt; font-size:11pt"><span style="-aw-import:ignore">{{ ctx.from_user }}</span></p>
+                    <p style="margin-top:3pt; font-size:11pt"><span style="-aw-import:ignore">{{ ctx.fio }}</span></p>
                 </td>
                 <td
                     style="width:2.95pt; border-right-style:solid; border-right-width:0.75pt; padding-right:1.02pt; padding-left:1.4pt; vertical-align:middle; -aw-border-right:0.5pt single">
@@ -242,7 +242,7 @@
                 </td>
                 <td style="width:2.85pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:middle">
                     <p style="margin-top:3pt; text-align:center; font-size:11pt"><span
-                            style="-aw-import:ignore">{{ ctx.from_account }}</span></p>
+                            style="-aw-import:ignore">{{ ctx.user_account }}</span></p>
                 </td>
                 <td colspan="2"
                     style="width:137.55pt; border-top-style:solid; border-top-width:0.75pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:middle; -aw-border-top:0.5pt single">
@@ -351,7 +351,7 @@
                 </td>
                 <td colspan="3"
                     style="width:181.4pt; border-top-style:solid; border-top-width:0.75pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:middle; -aw-border-top:0.5pt single">
-                    <p style="margin-top:3pt; font-size:11pt"><span style="-aw-import:ignore">{{ ctx.to_user }}</span></p>
+                    <p style="margin-top:3pt; font-size:11pt"><span style="-aw-import:ignore">{{ ctx.company }}</span></p>
                 </td>
                 <td
                     style="width:2.95pt; border-right-style:solid; border-right-width:0.75pt; padding-right:1.02pt; padding-left:1.4pt; vertical-align:middle; -aw-border-right:0.5pt single">
@@ -360,7 +360,7 @@
                 </td>
                 <td style="width:2.85pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:middle">
                     <p style="margin-top:3pt; text-align:center; font-size:11pt"><span
-                            style="-aw-import:ignore">{{ ctx.to_account }}</span></p>
+                            style="-aw-import:ignore">{{ ctx.company_account }}</span></p>
                 </td>
                 <td colspan="2"
                     style="width:137.55pt; border-top-style:solid; border-top-width:0.75pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:middle; -aw-border-top:0.5pt single">
@@ -557,7 +557,7 @@
                 <td colspan="3"
                     style="width:138.95pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:1.02pt; padding-left:1.4pt; vertical-align:middle; -aw-border-bottom:0.5pt single; -aw-border-right:0.5pt single">
                     <p style="margin-left:2.85pt; font-size:10pt"><span>ИНН</span><span style="-aw-import:spaces">&#xa0;
-                        {{ from_user.user_account.inn }}</span></p>
+                        {{ acc.user_account.inn }}</span></p>
                 </td>
                 <td colspan="4"
                     style="width:138.95pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:1.02pt; padding-left:1.4pt; vertical-align:middle; -aw-border-bottom:0.5pt single; -aw-border-right:0.5pt single">
@@ -592,7 +592,7 @@
             <tr style="height:13.65pt; page-break-inside:avoid">
                 <td colspan="7"
                     style="width:280.7pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:middle; -aw-border-bottom:0.5pt single">
-                    <p style="margin-left:2.85pt; font-size:10pt"><span>Плательщик {{ from_user.user_account.fio }}</span></p>
+                    <p style="margin-left:2.85pt; font-size:10pt"><span>Плательщик {{ ctx.fio }}</span></p>
                 </td>
             </tr>
             <tr style="height:5.2pt; page-break-inside:avoid">
@@ -634,7 +634,7 @@
                     <p style="margin-left:2.85pt; font-size:10pt"><span>БИК</span></p>
                 </td>
                 <td colspan="5" style="width:184.2pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:top">
-                    <p style="margin-left:2.85pt; font-size:10pt"><span style="-aw-import:ignore"></span></p>
+                    <p style="margin-left:2.85pt; font-size:10pt"><span style="-aw-import:ignore"> {{ bank.bik }}</span></p>
                 </td>
             </tr>
             <tr style="height:17.3pt; page-break-inside:avoid">
@@ -649,18 +649,18 @@
             </tr>
             <tr style="height:13.65pt; page-break-inside:avoid">
                 <td colspan="7" style="width:280.7pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:bottom">
-                    <p style="margin-left:2.85pt; font-size:10pt"><span>Банк получателя</span>    {{ ctx.bank }}</p>
+                    <p style="margin-left:2.85pt; font-size:10pt"><span>Банк получателя     {{ ctx.company_bank }}</span></p>
                 </td>
             </tr>
             <tr style="height:13.65pt; page-break-inside:avoid">
                 <td colspan="3"
                     style="width:138.95pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:1.02pt; padding-left:1.4pt; vertical-align:middle; -aw-border-bottom:0.5pt single; -aw-border-right:0.5pt single; -aw-border-top:0.5pt single">
-                    <p style="margin-left:2.85pt; font-size:10pt"><span>ИНН</span><span style="-aw-import:spaces">  {{ to_user.user_account.inn }}
+                    <p style="margin-left:2.85pt; font-size:10pt"><span>ИНН  {{ company.inn }}</span><span style="-aw-import:spaces">
                         </span></p>
                 </td>
                 <td colspan="4"
                     style="width:138.95pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:1.4pt; padding-left:1.02pt; vertical-align:middle; -aw-border-bottom:0.5pt single; -aw-border-left:0.5pt single; -aw-border-top:0.5pt single">
-                    <p style="margin-left:2.85pt; font-size:10pt"><span>КПП</span><span style="-aw-import:spaces">&#xa0;
+                    <p style="margin-left:2.85pt; font-size:10pt"><span>КПП  {{ company.kpp }}</span><span style="-aw-import:spaces">&#xa0;
                         </span></p>
                 </td>
                 <td colspan="2" rowspan="2"
@@ -669,7 +669,7 @@
                 </td>
                 <td colspan="5" rowspan="2"
                     style="width:184.2pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:top">
-                    <p style="margin-left:2.85pt; font-size:10pt"><span style="-aw-import:ignore">{{ to_user.account }}</span></p>
+                    <p style="margin-left:2.85pt; font-size:10pt"><span style="-aw-import:ignore">{{ ctx.company_account }}</span></p>
                 </td>
             </tr>
             <tr style="height:16pt; page-break-inside:avoid">
@@ -699,7 +699,7 @@
             <tr style="height:5pt; page-break-inside:avoid; -aw-height-rule:exactly">
                 <td colspan="7" rowspan="2"
                     style="width:280.7pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:1.4pt; padding-left:1.4pt; vertical-align:bottom; -aw-border-bottom:0.5pt single">
-                    <p style="font-size:10pt"><span>Получатель</span>  {{ to_user.user_account.fio }}</p>
+                    <p style="font-size:10pt"><span>Получатель</span>  {{ ctx.company }}</p>
                 </td>
                 <td colspan="2" rowspan="2"
                     style="width:39.75pt; border-right-style:solid; border-right-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:1.02pt; padding-left:1.02pt; vertical-align:middle; -aw-border-left:0.5pt single; -aw-border-right:0.5pt single">
