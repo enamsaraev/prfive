@@ -19,6 +19,13 @@ class AccountAdmin(admin.ModelAdmin):
 
     inlines = [MoneyAccountInLine]
 
+@admin.register(models.MoneyAccount)
+class MoneyAccountAdmin(admin.ModelAdmin):
+
+    list_display = ('account',)
+    list_filter = ('account',)
+    search_fields = ('account',)
+
 
 @admin.register(models.Company)
 class CompantAdmin(admin.ModelAdmin):
